@@ -1,8 +1,8 @@
 var express = require('express');
 var router = express.Router();
 
-const CalilApiAccess = require('../util/CalilApiAccess');
-const calil = new CalilApiAccess();
+const Calil = require('../util/Calil');
+const calil = new Calil();
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
