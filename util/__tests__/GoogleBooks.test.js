@@ -49,10 +49,6 @@ const googleBookInfoList = {
             type: "ISBN_10",
             identifier: "4839941874"
           },
-          {
-            type: "ISBN_13",
-            identifier: "9784839941871"
-          }
         ],
         maturityRating: "NOT_MATURE",
         allowAnonLogging: true,
@@ -62,19 +58,45 @@ const googleBookInfoList = {
           thumbnail: "http://books.google.com/books/content?id=ZpyK8u2kndAC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
         },
       },
+    }, {
+      kind: "books#volume",
+      id: "m7-jDwAAQBAJ",
+      etag: "Tb4qFA2q/3k",
+      selfLink: "https://www.googleapis.com/books/v1/volumes/m7-jDwAAQBAJ",
+      volumeInfo: {
+        title: "仕事がはかどるJavaScript活用術 ─Word/Excelで自動処理して効率アップ（日経BP Next ICT選書）",
+        authors: [
+          "クジラ飛行机"
+        ],
+        publisher: "日経BP",
+        publishedDate: "2014-09-24",
+        description: "いまや、パソコンが当たり前にあるオフィス。そんなオフィスだからこそ、こんな難問がときどき、降りかかってきませんか? 「100個あるExcel請求書から宛名と請求金額を抜き出したい」「100人以上に郵送するWord文書すべてに個別のQRコードを挿入したい」…。そんなの「人海戦術しかないでしょう! 」と思っているアナタ。実は一人で、それもほんの数時間でできてしまうのです。 その秘密は、プログラミング。仕事を片付けるために、簡単なプログラムを組むのです。 プログラミングって難しそうだし、なんとなく高価なソフトが必要なように思えるかもしれませんが、そんなことはありません。まず、Windowsがあれば無料です。そして、ちょっとした仕組みが分かれば、いろいろと応用できます。 本書では、プログラマーとして活躍中のクジラ飛行机氏が厳選したプログラミングのコツを公開します。すぐに使えるサンプルプログラムを特設サイトからダウンロードできます。",
+        industryIdentifiers: [{
+          type: "OTHER",
+          identifier: "PKEY:BT000028489600100101900209"
+        }],
+        imageLinks: {
+          smallThumbnail: "http://books.google.com/books/content?id=m7-jDwAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api",
+          thumbnail: "http://books.google.com/books/content?id=m7-jDwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+        },
+      },
     },
   ]
 }
 
 const convertedBookInfoList = [{
-    imageUrl: 'http://books.google.com/books/content?id=RDqQXFA42-kC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api',
-    title: 'Java Script',
-    authors: ['デイビッドフラナガン'],
-    isbn: 9784873113296
-  }, {
-    imageUrl: 'http://books.google.com/books/content?id=ZpyK8u2kndAC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api',
-    title: 'よくわかるJavaScriptの教科書',
-    authors: ['たにぐちまこと'],
-    isbn: 9784839941871
-  }
-]
+  imageUrl: 'http://books.google.com/books/content?id=RDqQXFA42-kC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api',
+  title: 'Java Script',
+  authors: ['デイビッドフラナガン'],
+  isbn: 9784873113296
+}, {
+  imageUrl: 'http://books.google.com/books/content?id=ZpyK8u2kndAC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api',
+  title: 'よくわかるJavaScriptの教科書',
+  authors: ['たにぐちまこと'],
+  isbn: 4839941874
+}, {
+  imageUrl: 'http://books.google.com/books/content?id=m7-jDwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api',
+  title: '仕事がはかどるJavaScript活用術 ─Word/Excelで自動処理して効率アップ（日経BP Next ICT選書）',
+  authors: ['クジラ飛行机'],
+  isbn: '',
+}]

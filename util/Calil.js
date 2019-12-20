@@ -1,9 +1,10 @@
+const _ = require('lodash');
 const ApiAccess = require('./ApiAccess');
 
 class CalilApiAccess {
   constructor() {
     this.api = new ApiAccess();
-    this.MAX_RETRY_NUMBER = 3;
+    this.MAX_RETRY_NUMBER = 5;
   }
 
   async searchBookStock(isbnList, libraryList) {
@@ -54,11 +55,13 @@ class CalilApiAccess {
   makeBookStockInfoList(bookInfoList, calilBookStockList) {
     const bookStockList = bookInfoList.map(bookInfo => {
       const stockInfo = calilBookStockList[bookInfo.isbn];
+      // const stockInfo = _.get(calilBookStockList[bookInfo], 'isbn', [])
 
       let stockByLibrary;
       if(calilBookStockList === undefined || calilBookStockList.length === 0) {
         stockByLibrary = [];
       } else {
+        // console.log(stockInfo)
         const libraryIDList = Object.keys(stockInfo);
         stockByLibrary = libraryIDList.map(libraryID => {
           return {

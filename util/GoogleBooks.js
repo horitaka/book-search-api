@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const ApiAccess = require('./ApiAccess');
 
 class GoogleBooks {
@@ -9,14 +10,14 @@ class GoogleBooks {
     console.log('GoogleBooksApiAccess: ' + searchKeyword)
     console.log('GoogleBooksApiAccess: ' + searchType)
 
-    const baseUrl = 'https://www.googleapis.com/books/v1/volumes?filter=partial&maxResults=30&printType=books'
+    const baseUrl = 'https://www.googleapis.com/books/v1/volumes?filter=partial&maxResults=10&printType=books'
     let searchQuery = '';
     switch (searchType) {
       case 'SEARCH_TYPE_ISBN':
         searchQuery = `q=+isbn:${searchKeyword}`
         break;
       default:
-        searchQuery = `q=searchKeyword`
+        searchQuery = `q=${searchKeyword}`
         break;
     }
 
@@ -35,15 +36,24 @@ class GoogleBooks {
   }
 
   convertBookInfoListFormat(googleBookInfoList) {
-    const bookInfoList = googleBookInfoList.items.map(bookInfo => {
-      const isbn13Object = bookInfo.volumeInfo.industryIdentifiers.find(isbns => isbns.type === 'ISBN_13')
-      const isbn13 = Number(isbn13Object.identifier);
+    const bookInfoList = googleBookInfoList.items.map((bookInfo) => {
+      const isbn13Object = _.get(bookInfo, 'volumeInfo.industryIdentifiers', []).find(isbns => isbns.type === 'ISBN_13')
+      const isbn10Object = _.get(bookInfo, 'volumeInfo.industryIdentifiers', []).find(isbns => isbns.type === 'ISBN_10')
+
+      let isbn;
+      if (isbn13Object) {
+        isbn = Number(isbn13Object.identifier)
+      } else if (isbn10Object) {
+        isbn = Number(isbn10Object.identifier)
+      } else {
+        isbn = 0;
+      }
 
       return {
         imageUrl: bookInfo.volumeInfo.imageLinks.thumbnail,
         title: bookInfo.volumeInfo.title,
         authors: bookInfo.volumeInfo.authors,
-        isbn: isbn13,
+        isbn: isbn,
       }
     })
 
