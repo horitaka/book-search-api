@@ -4,7 +4,7 @@ const ApiAccess = require('./ApiAccess');
 class CalilApiAccess {
   constructor() {
     this.api = new ApiAccess();
-    this.MAX_RETRY_NUMBER = 5;
+    this.MAX_RETRY_NUMBER = 10;
   }
 
   async searchBookStock(isbnList, libraryList) {
