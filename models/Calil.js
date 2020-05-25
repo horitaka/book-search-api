@@ -1,5 +1,7 @@
 const _ = require('lodash');
+
 const AxiosWrapper = require('../util/AxiosWrapper');
+const config = require('../config')
 
 class Calil {
   constructor() {
@@ -8,12 +10,16 @@ class Calil {
   }
 
   async searchBookStock(isbnList, libraryList) {
-    const baseUrl = 'http://api.calil.jp/check?callback=no&appkey=1e337d58ad44c968c93dc772f684dc0a&format=json';
-    const isbnQuery = 'isbn=' + isbnList.join(',');
-    const libraryQuery = 'systemid=' + libraryList.join(',')
-    const calilBookUrl = baseUrl + '&' + isbnQuery + '&' + libraryQuery;
+    const params = {
+      callback: 'no',
+      appkey: config.calil.apiKey,
+      format: 'json',
+      isbn: isbnList.join(','),
+      systemid: libraryList.join(','),
+    }
+    const bookStockApiUrl = config.calil.apiUrl + '/check'
 
-    const calilBoolResponse = await this.axios.fetchData(calilBookUrl);
+    const calilBoolResponse = await this.axios.fetchData(bookStockApiUrl, params);
     if (calilBoolResponse.continue === 0) {
       const calilBooks = calilBoolResponse.books
       return calilBooks;
@@ -25,12 +31,16 @@ class Calil {
   }
 
   async retrySearchBookStock(session, numOfRetries) {
-    const baseUrl = 'http://api.calil.jp/check?callback=no&appkey=1e337d58ad44c968c93dc772f684dc0a&format=json';
-    const sessionQuery = 'session=' + session;
-    const calilRetryUrl = baseUrl + '&' + sessionQuery;
+    const params = {
+      callback: 'no',
+      appkey: config.calil.apiKey,
+      format: 'json',
+      session: session,
+    }
+    const retryApiUrl = config.calil.apiUrl + '/check'
 
     for (let i = 0; i < numOfRetries; i++) {
-      const calilBoolResponse = await this.axios.fetchData(calilRetryUrl);
+      const calilBoolResponse = await this.axios.fetchData(retryApiUrl, params);
       if (calilBoolResponse.continue === 0) {
         return calilBoolResponse.books;
       }
@@ -115,21 +125,23 @@ class Calil {
     return canBeRend;
   }
 
-  searchLibrary(prefecture) {
+  async searchLibrary(prefecture) {
     const api = new AxiosWrapper();
-    const calilLibraryURL = 'http://api.calil.jp/library?appkey=1e337d58ad44c968c93dc772f684dc0a&format=json&callback=&pref=' + encodeURIComponent(prefecture);
-    // const calilLibraryURL = 'http://api.calil.jp/library?appkey=1e337d58ad44c968c93dc772f684dc0a&format=json&callback=&geocode=136.7163027,35.390516&limit=10';
+    const params = {
+      appkey: config.calil.apiKey,
+      format: 'json',
+      callback: '',
+      pref: prefecture,
+    }
+    const libraryApiUrl = config.calil.apiUrl + '/library'
 
-    return new Promise((resolve, reject) => {
-      api.fetchData(calilLibraryURL)
-        .then((calilLibraryList) => {
-          const libraryList = this.convertLibraryDataFormat(calilLibraryList);
-          resolve(libraryList)
-        })
-        .catch(error => {
-          reject(error);
-        })
-    })
+    try {
+      const calilLibraryList = await api.fetchData(libraryApiUrl, params)
+      const libraryList = this.convertLibraryDataFormat(calilLibraryList);
+      return libraryList
+    } catch (error) {
+      throw new Error(error)
+    }
   }
 
   convertLibraryDataFormat(calilLibraryList) {

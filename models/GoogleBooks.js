@@ -1,6 +1,7 @@
 const _ = require('lodash');
 
 const axios = require('../util/AxiosWrapper');
+const config = require('../config')
 
 class GoogleBooks {
   constructor() {
@@ -8,21 +9,27 @@ class GoogleBooks {
   }
 
   searchBooks(searchKeyword, searchType) {
-    const baseUrl = 'https://www.googleapis.com/books/v1/volumes?filter=partial&maxResults=10&printType=books'
-    let searchQuery = '';
-    switch (searchType) {
-      case 'SEARCH_TYPE_ISBN':
-        searchQuery = `q=+isbn:${searchKeyword}`
-        break;
-      default:
-        searchQuery = `q=${searchKeyword}`
-        break;
-    }
 
-    const googleUrl = baseUrl + '&' + searchQuery;
+    const params = {
+      filter: 'partial',
+      maxResults: 10,
+      printType: 'books',
+      q: searchKeyword,
+    }
+    const googleBooksApiUrl = config.googleBooks.apiUrl + '/v1/volumes'
+
+    // let searchQuery = '';
+    // switch (searchType) {
+    //   case 'SEARCH_TYPE_ISBN':
+    //     searchQuery = `q=+isbn:${searchKeyword}`
+    //     break;
+    //   default:
+    //     searchQuery = `q=${searchKeyword}`
+    //     break;
+    // }
 
     return new Promise((resolve, reject) => {
-      this.axios.fetchData(googleUrl)
+      this.axios.fetchData(googleBooksApiUrl, params)
         .then(googleBookInfoList => {
           const formattedBookInfoList = this.convertBookInfoListFormat(googleBookInfoList)
           resolve(formattedBookInfoList);

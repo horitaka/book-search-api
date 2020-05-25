@@ -28,7 +28,6 @@ class Books {
 
     // 書籍情報に図書館の在庫情報をマージする
     const bookStockList = this.calil.makeBookStockInfoList(bookInfoList, calilBookStockList);
-
     return bookStockList;
   }
 
