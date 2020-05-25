@@ -1,15 +1,13 @@
 const _ = require('lodash');
-const ApiAccess = require('./ApiAccess');
+
+const axios = require('../util/AxiosWrapper');
 
 class GoogleBooks {
   constructor() {
-    this.api = new ApiAccess();
+    this.axios = new axios();
   }
 
   searchBooks(searchKeyword, searchType) {
-    console.log('GoogleBooksApiAccess: ' + searchKeyword)
-    console.log('GoogleBooksApiAccess: ' + searchType)
-
     const baseUrl = 'https://www.googleapis.com/books/v1/volumes?filter=partial&maxResults=10&printType=books'
     let searchQuery = '';
     switch (searchType) {
@@ -24,7 +22,7 @@ class GoogleBooks {
     const googleUrl = baseUrl + '&' + searchQuery;
 
     return new Promise((resolve, reject) => {
-      this.api.fetchData(googleUrl)
+      this.axios.fetchData(googleUrl)
         .then(googleBookInfoList => {
           const formattedBookInfoList = this.convertBookInfoListFormat(googleBookInfoList)
           resolve(formattedBookInfoList);
@@ -59,8 +57,6 @@ class GoogleBooks {
 
     return bookInfoList;
   }
-
-
 }
 
 module.exports = GoogleBooks;

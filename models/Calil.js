@@ -1,22 +1,19 @@
 const _ = require('lodash');
-const ApiAccess = require('./ApiAccess');
+const AxiosWrapper = require('../util/AxiosWrapper');
 
-class CalilApiAccess {
+class Calil {
   constructor() {
-    this.api = new ApiAccess();
+    this.axios = new AxiosWrapper();
     this.MAX_RETRY_NUMBER = 10;
   }
 
   async searchBookStock(isbnList, libraryList) {
-    // console.log('Calil-searchBookStock: ' + isbnList)
-    // console.log('Calil-searchBookStock: ' + libraryList)
-
     const baseUrl = 'http://api.calil.jp/check?callback=no&appkey=1e337d58ad44c968c93dc772f684dc0a&format=json';
     const isbnQuery = 'isbn=' + isbnList.join(',');
     const libraryQuery = 'systemid=' + libraryList.join(',')
     const calilBookUrl = baseUrl + '&' + isbnQuery + '&' + libraryQuery;
 
-    const calilBoolResponse = await this.api.fetchData(calilBookUrl);
+    const calilBoolResponse = await this.axios.fetchData(calilBookUrl);
     if (calilBoolResponse.continue === 0) {
       const calilBooks = calilBoolResponse.books
       return calilBooks;
@@ -32,8 +29,8 @@ class CalilApiAccess {
     const sessionQuery = 'session=' + session;
     const calilRetryUrl = baseUrl + '&' + sessionQuery;
 
-    for(let i=0; i<numOfRetries; i++) {
-      const calilBoolResponse = await this.api.fetchData(calilRetryUrl);
+    for (let i = 0; i < numOfRetries; i++) {
+      const calilBoolResponse = await this.axios.fetchData(calilRetryUrl);
       if (calilBoolResponse.continue === 0) {
         return calilBoolResponse.books;
       }
@@ -58,7 +55,7 @@ class CalilApiAccess {
       // const stockInfo = _.get(calilBookStockList[bookInfo], 'isbn', [])
 
       let stockByLibrary;
-      if(calilBookStockList === undefined || calilBookStockList.length === 0) {
+      if (calilBookStockList === undefined || calilBookStockList.length === 0) {
         stockByLibrary = [];
       } else {
         // console.log(stockInfo)
@@ -94,7 +91,7 @@ class CalilApiAccess {
     所有していない場合は空の値となるのでその場合はfalseを返す
     */
     const keys = Object.keys(calilLibkeys)
-    if(keys.length === 0) {
+    if (keys.length === 0) {
       return false;
     } else {
       return true;
@@ -119,7 +116,7 @@ class CalilApiAccess {
   }
 
   searchLibrary(prefecture) {
-    const api = new ApiAccess();
+    const api = new AxiosWrapper();
     const calilLibraryURL = 'http://api.calil.jp/library?appkey=1e337d58ad44c968c93dc772f684dc0a&format=json&callback=&pref=' + encodeURIComponent(prefecture);
     // const calilLibraryURL = 'http://api.calil.jp/library?appkey=1e337d58ad44c968c93dc772f684dc0a&format=json&callback=&geocode=136.7163027,35.390516&limit=10';
 
@@ -141,12 +138,12 @@ class CalilApiAccess {
     }
 
     // 公共の図書館のみを抽出
-    const publicLibraryList = calilLibraryList.filter(function(library) {
+    const publicLibraryList = calilLibraryList.filter(function (library) {
       return library.category === 'SMALL' || library.category === 'MEDIUM' || library.category === 'LARGE';
     })
 
     // フォーマットの変換
-    const formattedLibraryList = publicLibraryList.map(function(library) {
+    const formattedLibraryList = publicLibraryList.map(function (library) {
       return {
         libraryID: library.systemid,
         libraryName: library.systemname,
@@ -159,11 +156,11 @@ class CalilApiAccess {
 
     // 同じlibraryNameの図書館を一つのオブジェクトにまとめる
     let uniqueLibraryList = [];
-    formattedLibraryList.forEach(function(library) {
+    formattedLibraryList.forEach(function (library) {
 
       // libraryIDが同じ場合はindexを取得
       var indexOfDuplicateLibrary = -1;
-      for (var i=0; i<uniqueLibraryList.length; i++) {
+      for (var i = 0; i < uniqueLibraryList.length; i++) {
         if (uniqueLibraryList[i].libraryID === library.libraryID) {
           indexOfDuplicateLibrary = i;
           break;
@@ -193,4 +190,4 @@ class CalilApiAccess {
 
 }
 
-module.exports = CalilApiAccess;
+module.exports = Calil;

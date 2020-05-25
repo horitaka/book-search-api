@@ -1,7 +1,7 @@
 const GoogleBooks = require('./GoogleBooks')
 const Calil = require('./Calil');
 
-class BookFunction {
+class Books {
   constructor() {
     this.SEARCH_TYPE_ISBN = 'SEARCH_TYPE_ISBN';
     this.SEARCH_TYPE_FREEWORD = 'SEARCH_TYPE_FREEWORD';
@@ -12,7 +12,7 @@ class BookFunction {
   async getBookInfoList(keyword, libraryIDList) {
     const isAmazonUrl = this.isAmazonUrl(keyword)
     let isbn = 0;
-    if(isAmazonUrl) {
+    if (isAmazonUrl) {
       isbn = this.extractIsbn(keyword);
     }
 
@@ -34,7 +34,7 @@ class BookFunction {
 
   isAmazonUrl(text) {
     const amazonUrl = 'https://www.amazon.co.jp'
-    if(text.startsWith(amazonUrl)) {
+    if (text.startsWith(amazonUrl)) {
       return true
     } else {
       return false;
@@ -52,7 +52,7 @@ class BookFunction {
     const regExp = `(?<=${startWith})[0-9]+(?=${endWith})`;
     const matches = amazonUrl.match(regExp);
 
-    if(matches !== null) {
+    if (matches !== null) {
       return Number(matches[0]);
     } else {
       return -1
@@ -68,4 +68,4 @@ class BookFunction {
 
 }
 
-module.exports = BookFunction;
+module.exports = Books;
