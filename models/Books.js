@@ -9,6 +9,11 @@ class Books {
     this.calil = new Calil();
   }
 
+  async getBooks(keyword) {
+    const bookResults = await this.googleBooks.searchBooks(keyword);
+    return bookResults
+  }
+
   async getBookInfoList(keyword, libraryIDList) {
     const isAmazonUrl = this.isAmazonUrl(keyword)
     let isbn = 0;
