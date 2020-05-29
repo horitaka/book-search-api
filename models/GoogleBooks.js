@@ -12,7 +12,7 @@ class GoogleBooks {
 
     const params = {
       filter: 'partial',
-      maxResults: 10,
+      maxResults: 5,
       printType: 'books',
       q: searchKeyword,
     }

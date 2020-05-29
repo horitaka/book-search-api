@@ -9,13 +9,13 @@ class Calil {
     this.MAX_RETRY_NUMBER = 10;
   }
 
-  async searchBookStock(isbnList, libraryList) {
+  async searchBookStock(isbns, libraryIds) {
     const params = {
       callback: 'no',
       appkey: config.calil.apiKey,
       format: 'json',
-      isbn: isbnList.join(','),
-      systemid: libraryList.join(','),
+      isbn: isbns.join(','),
+      systemid: libraryIds.join(','),
     }
     const bookStockApiUrl = config.calil.apiUrl + '/check'
 

@@ -14,6 +14,10 @@ class Books {
     return bookResults
   }
 
+  async getBooksStocks(isbns, libraryIds) {
+    return await this.calil.searchBookStock(isbns, libraryIds);
+  }
+
   async getBookInfoList(keyword, libraryIDList) {
     const isAmazonUrl = this.isAmazonUrl(keyword)
     let isbn = 0;
