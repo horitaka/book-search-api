@@ -2,6 +2,7 @@ const _ = require('lodash');
 
 const AxiosWrapper = require('../util/AxiosWrapper');
 const config = require('../config')
+const calilLibraries = require('../constants/calil-libraries')
 
 class Calil {
   constructor() {
@@ -189,6 +190,8 @@ class Calil {
   }
 
   convertLibraryDataFormat(calilLibraryList) {
+    const self = this;
+
     if (!calilLibraryList) {
       return [];
     }
@@ -230,7 +233,7 @@ class Calil {
       } else {
         var tmpLibrary = {
           libraryId: library.libraryId,
-          libraryName: library.libraryName,
+          libraryName: self.getLibraryName(library.prefecture, library.libraryId, library.libraryName) || library.libraryName,
           prefecture: library.prefecture,
           city: library.city,
           librarySiteUrl: library.librarySiteUrl,
@@ -242,6 +245,17 @@ class Calil {
     })
 
     return uniqueLibraryList;
+  }
+
+  getLibraryName(prefecture, libraryId, libraryName) {
+    if (calilLibraries[prefecture] && calilLibraries[prefecture][libraryId].name) {
+      return calilLibraries[prefecture][libraryId].name
+    }
+    if (libraryName.endsWith('図書館')) {
+      return libraryName
+    }
+
+    return libraryName.replace(prefecture, '') + '図書館'
   }
 
 }
