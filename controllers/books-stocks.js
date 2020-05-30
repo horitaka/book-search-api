@@ -7,7 +7,8 @@ exports.getBooksStocks = async (req, res) => {
 
   try {
     const booksStocks = await books.getBooksStocks(isbns, libraryIds)
-    res.json(booksStocks);
+    const convertedBooksStocks = books.convertBooksStocksFormat(booksStocks)
+    res.json(convertedBooksStocks);
   } catch (error) {
     console.warn(error);
     res.json([]);

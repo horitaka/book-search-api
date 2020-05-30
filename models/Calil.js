@@ -90,40 +90,40 @@ class Calil {
 
   }
 
-  checkIsOwned(calilLibkeys) {
-    /*
-    calilLibkeys: {
-      東十条: "貸出可",
-      滝西: "貸出中",
-      分室: "予約中",
-      滝野川: "予約中"
-    }
-    所有していない場合は空の値となるのでその場合はfalseを返す
-    */
-    const keys = Object.keys(calilLibkeys)
-    if (keys.length === 0) {
-      return false;
-    } else {
-      return true;
-    }
-  }
+  // checkIsOwned(calilLibkeys) {
+  //   /*
+  //   calilLibkeys: {
+  //     東十条: "貸出可",
+  //     滝西: "貸出中",
+  //     分室: "予約中",
+  //     滝野川: "予約中"
+  //   }
+  //   所有していない場合は空の値となるのでその場合はfalseを返す
+  //   */
+  //   const keys = Object.keys(calilLibkeys)
+  //   if (keys.length === 0) {
+  //     return false;
+  //   } else {
+  //     return true;
+  //   }
+  // }
 
-  checkCanBeRend(calilLibkeys) {
-    /*
-    calilLibkeys: {
-      東十条: "貸出可",
-      滝西: "貸出中",
-      分室: "予約中",
-      滝野川: "予約中"
-    }
-    '貸出可'が1つでも含まれる場合はtrueを返す
-    */
-    const keys = Object.keys(calilLibkeys);
-    const canBeRend = keys.some(key => {
-      return calilLibkeys[key] === '貸出可'
-    })
-    return canBeRend;
-  }
+  // checkCanBeRend(calilLibkeys) {
+  //   /*
+  //   calilLibkeys: {
+  //     東十条: "貸出可",
+  //     滝西: "貸出中",
+  //     分室: "予約中",
+  //     滝野川: "予約中"
+  //   }
+  //   '貸出可'が1つでも含まれる場合はtrueを返す
+  //   */
+  //   const keys = Object.keys(calilLibkeys);
+  //   const canBeRend = keys.some(key => {
+  //     return calilLibkeys[key] === '貸出可'
+  //   })
+  //   return canBeRend;
+  // }
 
   async searchLibrary(prefecture) {
     const api = new AxiosWrapper();
@@ -157,7 +157,7 @@ class Calil {
     // フォーマットの変換
     const formattedLibraryList = publicLibraryList.map(function (library) {
       return {
-        libraryID: library.systemid,
+        libraryId: library.systemid,
         libraryName: library.systemname,
         prefecture: library.pref,
         city: library.city,
@@ -170,22 +170,22 @@ class Calil {
     let uniqueLibraryList = [];
     formattedLibraryList.forEach(function (library) {
 
-      // libraryIDが同じ場合はindexを取得
+      // libraryIdが同じ場合はindexを取得
       var indexOfDuplicateLibrary = -1;
       for (var i = 0; i < uniqueLibraryList.length; i++) {
-        if (uniqueLibraryList[i].libraryID === library.libraryID) {
+        if (uniqueLibraryList[i].libraryId === library.libraryId) {
           indexOfDuplicateLibrary = i;
           break;
         }
       }
 
-      // 同じlibraryIDがすでにuniqueLibraryListに存在する場合はbranchesにbranchNameを追加
+      // 同じlibraryIdがすでにuniqueLibraryListに存在する場合はbranchesにbranchNameを追加
       // 存在しない場合はuniqueLibraryListに新規にオブジェクトを追加
       if (indexOfDuplicateLibrary > -1) {
         uniqueLibraryList[i].branches.push(library.branchName)
       } else {
         var tmpLibrary = {
-          libraryID: library.libraryID,
+          libraryId: library.libraryId,
           libraryName: library.libraryName,
           prefecture: library.prefecture,
           city: library.city,
