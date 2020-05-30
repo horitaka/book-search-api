@@ -1,6 +1,6 @@
 const _ = require('lodash');
 
-const axios = require('../util/AxiosWrapper');
+const axios = require('./AxiosWrapper');
 const config = require('../config')
 
 class GoogleBooks {

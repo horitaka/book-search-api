@@ -1,6 +1,6 @@
-describe('Books', () => {
-  const Books = require('./Books');
-  const books = new Books;
+describe('Calil', () => {
+  const Calil = require('./Calil');
+  const calil = new Calil;
 
   it('calls convertStocksObjectToArray', () => {
     const stocksObject = {
@@ -32,7 +32,7 @@ describe('Books', () => {
       }
     ]
 
-    expect(books.convertStocksObjectToArray(stocksObject)).toEqual(stocksArray)
+    expect(calil.convertStocksObjectToArray(stocksObject)).toEqual(stocksArray)
   })
 
   it('calls convertBooksStocksFormat', () => {
@@ -110,7 +110,7 @@ describe('Books', () => {
         }
       ]
     }
-    expect(books.convertBooksStocksFormat(booksStocks)).toEqual(expectedData)
+    expect(calil.convertBooksStocksFormat(booksStocks)).toEqual(expectedData)
 
   })
 })

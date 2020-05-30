@@ -1,11 +1,11 @@
-const Calil = require('../models/Calil');
-const calil = new Calil();
+const Library = require('../models/Library');
+const library = new Library();
 
 exports.getLibraries = async (req, res) => {
   const prefecture = req.query.prefecture;
 
   try {
-    const response = await calil.searchLibrary(prefecture);
+    const response = await library.getLibraries(prefecture);
     res.json(response);
   } catch (error) {
     console.warn(error);

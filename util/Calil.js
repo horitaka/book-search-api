@@ -10,6 +10,12 @@ class Calil {
   }
 
   async searchBookStock(isbns, libraryIds) {
+    const calilBooksStocks = await this.searchBookStockWithRetry(isbns, libraryIds)
+    const booksStocks = this.convertBooksStocksFormat(calilBooksStocks)
+    return booksStocks
+  }
+
+  async searchBookStockWithRetry(isbns, libraryIds) {
     const params = {
       callback: 'no',
       appkey: config.calil.apiKey,
@@ -51,6 +57,78 @@ class Calil {
     return [];
   }
 
+  convertBooksStocksFormat(booksStocks) {
+    const isbns = Object.keys(booksStocks)
+
+    let convertedBooksStocks = {}
+    isbns.forEach(isbn => {
+      if (isbn !== '0') {
+        convertedBooksStocks[isbn] = this.convertStocksObjectToArray(booksStocks[isbn])
+      }
+    })
+
+    return convertedBooksStocks
+  }
+
+  convertStocksObjectToArray(stocks) {
+    const libraryIds = Object.keys(stocks)
+    const stocksArray = libraryIds.map(libraryId => {
+      return {
+        libraryId: libraryId,
+        bookRentalUrl: stocks[libraryId].reserveurl || '',
+        isOwned: this.checkIsOwned(stocks[libraryId].libkey),
+        canBeRend: this.checkCanBeRend(stocks[libraryId].libkey)
+      }
+    })
+    return stocksArray
+  }
+
+  checkIsOwned(calilLibkeys) {
+    /*
+    calilLibkeys: {
+      東十条: "貸出可",
+      滝西: "貸出中",
+      分室: "予約中",
+      滝野川: "予約中"
+    }
+    所有していない場合は空の値となるのでその場合はfalseを返す
+    */
+
+    if (!calilLibkeys) {
+      return false
+    }
+
+    const keys = Object.keys(calilLibkeys)
+    if (keys.length === 0) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  checkCanBeRend(calilLibkeys) {
+    /*
+    calilLibkeys: {
+      東十条: "貸出可",
+      滝西: "貸出中",
+      分室: "予約中",
+      滝野川: "予約中"
+    }
+    '貸出可'が1つでも含まれる場合はtrueを返す
+    */
+
+    if (!calilLibkeys) {
+      return false
+    }
+
+    const keys = Object.keys(calilLibkeys);
+    const canBeRend = keys.some(key => {
+      return calilLibkeys[key] === '貸出可'
+    })
+    return canBeRend;
+  }
+
+
   sleep(msec) {
     return new Promise(resolve => {
       setTimeout(() => {
@@ -90,40 +168,6 @@ class Calil {
 
   }
 
-  // checkIsOwned(calilLibkeys) {
-  //   /*
-  //   calilLibkeys: {
-  //     東十条: "貸出可",
-  //     滝西: "貸出中",
-  //     分室: "予約中",
-  //     滝野川: "予約中"
-  //   }
-  //   所有していない場合は空の値となるのでその場合はfalseを返す
-  //   */
-  //   const keys = Object.keys(calilLibkeys)
-  //   if (keys.length === 0) {
-  //     return false;
-  //   } else {
-  //     return true;
-  //   }
-  // }
-
-  // checkCanBeRend(calilLibkeys) {
-  //   /*
-  //   calilLibkeys: {
-  //     東十条: "貸出可",
-  //     滝西: "貸出中",
-  //     分室: "予約中",
-  //     滝野川: "予約中"
-  //   }
-  //   '貸出可'が1つでも含まれる場合はtrueを返す
-  //   */
-  //   const keys = Object.keys(calilLibkeys);
-  //   const canBeRend = keys.some(key => {
-  //     return calilLibkeys[key] === '貸出可'
-  //   })
-  //   return canBeRend;
-  // }
 
   async searchLibrary(prefecture) {
     const api = new AxiosWrapper();
