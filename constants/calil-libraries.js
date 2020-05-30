@@ -471,7 +471,6 @@ const libraries = {
   Chiba_Yachimata: { name: '' },
   Chiba_Yachiyo: { name: '' },
   Chiba_Yokoshiba: { name: '' },
-
   東京都: {
     Tokyo_Adachi: { name: '足立区立図書館' },
     Tokyo_Akiruno: { name: 'あきる野市立図書館' },
