@@ -178,13 +178,9 @@ class Calil {
     }
     const libraryApiUrl = config.calil.apiUrl + '/library'
 
-    try {
-      const calilLibraryList = await api.fetchData(libraryApiUrl, params)
-      const libraryList = this.convertLibraryDataFormat(calilLibraryList);
-      return libraryList
-    } catch (error) {
-      throw new Error(error)
-    }
+    const calilLibraryList = await api.fetchData(libraryApiUrl, params)
+    const libraryList = this.convertLibraryDataFormat(calilLibraryList);
+    return libraryList
   }
 
   convertLibraryDataFormat(calilLibraryList) {

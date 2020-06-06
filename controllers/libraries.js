@@ -1,15 +1,18 @@
 const Library = require('../models/Library');
 const library = new Library();
 
-exports.getLibraries = async (req, res) => {
+exports.getLibraries = async (req, res, next) => {
   const prefecture = req.query.prefecture;
+
+  if (!prefecture) {
+    next(Boom.badRequest('prefecture is undefined or not set'))
+    return
+  }
 
   try {
     const response = await library.getLibraries(prefecture);
     res.json(response);
   } catch (error) {
-    console.warn(error);
-    res.json([])
-    // res.send('図書館の情報が取得できませんでした')
+    next(error)
   }
 }

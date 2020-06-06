@@ -56,8 +56,12 @@ class GoogleBooks {
         isbn = 0;
       }
 
+      const imageUrl = (bookInfo.volumeInfo.imageLinks && bookInfo.volumeInfo.imageLinks.thumbnail)
+        ? bookInfo.volumeInfo.imageLinks.thumbnail
+        : ''
+
       return {
-        imageUrl: bookInfo.volumeInfo.imageLinks.thumbnail,
+        imageUrl: imageUrl,
         title: bookInfo.volumeInfo.title,
         authors: bookInfo.volumeInfo.authors,
         isbn: isbn,
