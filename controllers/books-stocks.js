@@ -1,3 +1,5 @@
+const Boom = require('@hapi/boom');
+
 const BookStock = require('../models/BookStock');
 const bookStock = new BookStock();
 
