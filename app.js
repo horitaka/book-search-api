@@ -4,6 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const cors = require('cors')
+const Boom = require('@hapi/boom');
 
 var indexRouter = require('./routes/index');
 var librariesRouter = require('./routes/libraries');
@@ -35,13 +36,29 @@ app.use(function (req, res, next) {
 
 // error handler
 app.use(function (err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+  // console.log(err)
 
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error'); // Todo
+  // // set locals, only providing error in development
+  // res.locals.message = err.message;
+  // res.locals.error = req.app.get('env') === 'development' ? err : {};
+
+  // // render the error page
+  // res.status(err.status || 500);
+  // res.render('error'); 
+
+  console.log(err)
+  if (err.isBoom) {
+    res.status(err.output.statusCode)
+    const errorRespons = {
+      ...err.output.payload,
+      data: err.data,
+    }
+    res.json(errorRespons)
+  } else {
+    res.status(500)
+    res.json(Boom.internal('Internal server error').output.payload);
+  }
+
 });
 
 module.exports = app;

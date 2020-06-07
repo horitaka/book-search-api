@@ -5,8 +5,8 @@ class Books {
     this.books = []
   }
 
-  async getBooks(keyword) {
-    this.books = await this.googleBooks.searchBooks(keyword);
+  async getBooks(keyword, page) {
+    this.books = await this.googleBooks.searchBooks(keyword, page);
     return this.books
   }
 

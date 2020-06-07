@@ -8,13 +8,15 @@ class GoogleBooks {
     this.axios = new axios();
   }
 
-  searchBooks(searchKeyword, searchType) {
+  searchBooks(searchKeyword, page) {
+    const MAX_RESULTS_PER_SEARCH = 5;
 
     const params = {
       filter: 'partial',
-      maxResults: 5,
+      maxResults: MAX_RESULTS_PER_SEARCH,
       printType: 'books',
       q: searchKeyword,
+      startIndex: MAX_RESULTS_PER_SEARCH * page
     }
     const googleBooksApiUrl = config.googleBooks.apiUrl + '/v1/volumes'
 
@@ -54,8 +56,12 @@ class GoogleBooks {
         isbn = 0;
       }
 
+      const imageUrl = (bookInfo.volumeInfo.imageLinks && bookInfo.volumeInfo.imageLinks.thumbnail)
+        ? bookInfo.volumeInfo.imageLinks.thumbnail
+        : ''
+
       return {
-        imageUrl: bookInfo.volumeInfo.imageLinks.thumbnail,
+        imageUrl: imageUrl,
         title: bookInfo.volumeInfo.title,
         authors: bookInfo.volumeInfo.authors,
         isbn: isbn,
