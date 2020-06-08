@@ -6,6 +6,7 @@ const logger = require('morgan');
 const cors = require('cors')
 const Boom = require('@hapi/boom');
 const helmet = require('helmet')
+// const compression = require('compression')
 
 const indexRouter = require('./routes/index');
 const librariesRouter = require('./routes/libraries');
@@ -25,6 +26,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
 app.use(helmet());
+// app.use(compression());
 
 app.use('/', indexRouter);
 app.use('/libraries', librariesRouter);
