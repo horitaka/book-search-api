@@ -1,3 +1,5 @@
+const Boom = require('@hapi/boom')
+
 const AxiosWrapper = require('../util/AxiosWrapper');
 const config = require('../config')
 const calilLibraries = require('../constants/calil-libraries')
@@ -5,7 +7,7 @@ const calilLibraries = require('../constants/calil-libraries')
 class Calil {
   constructor() {
     this.axios = new AxiosWrapper();
-    this.MAX_RETRY_NUMBER = 10;
+    this.MAX_RETRY_NUMBER = 20;
   }
 
   async searchBookStock(isbns, libraryIds) {
@@ -49,11 +51,12 @@ class Calil {
       if (calilBoolResponse.continue === 0) {
         return calilBoolResponse.books;
       }
-      await this.sleep(2000);
+      await this.sleep(3000);
     }
 
-    console.warn('Calil-retrySearchBookStock: Exceeded max retry attempts')
-    return [];
+    throw Boom.clientTimeout('Calil-retrySearchBookStock: Exceeded max retry attempts')
+    // console.warn('Calil-retrySearchBookStock: Exceeded max retry attempts')
+    // return [];
   }
 
   convertBooksStocksFormat(booksStocks) {
