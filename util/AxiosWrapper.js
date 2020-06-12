@@ -17,15 +17,20 @@ class AxiosWrapper {
         })
         .catch(error => {
           const status = error.response.status
+          const data = {
+            ...error.response.data,
+            url: url,
+            options: options,
+          }
           let response;
           if (status === 400) {
-            response = Boom.badRequest(error.message, error.response.data)
+            response = Boom.badRequest(error.message, data)
           } else if (status === 403) {
-            response = Boom.forbidden(error.message, error.response.data)
+            response = Boom.forbidden(error.message, data)
           } else if (status === 404) {
-            response = Boom.notFound(error.message, error.response.data)
+            response = Boom.notFound(error.message, data)
           } else {
-            response = Boom.internal(error.message, error.response.data)
+            response = Boom.internal(error.message, data)
           }
 
           reject(response)
