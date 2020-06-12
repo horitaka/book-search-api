@@ -1,4 +1,4 @@
-const GoogleBooks = require('../GoogleBooks');
+const GoogleBooks = require('./GoogleBooks');
 const googleBooks = new GoogleBooks();
 
 describe('GoogleBooks', () => {
