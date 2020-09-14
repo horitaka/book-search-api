@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "pm2 start ./bin/www --name book-search-api",
+    "start": "node ./bin/www",
     "dev": "nodemon ./bin/www",
     "test": "jest --watchAll"
   },
